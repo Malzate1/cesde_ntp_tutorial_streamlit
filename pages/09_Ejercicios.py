@@ -1,4 +1,5 @@
 import streamlit as st
+import random
 
 st.subheader("Ejercicio 1: Saludo Simple")
 
@@ -81,9 +82,59 @@ st.divider()
 
 st.subheader("Ejercicio 6: Login Simulado (Session State)")
 
-#usuario = st.text_input("Ingrese su usuario:")
-#contrasena= 
+if "logueado" not in st.session_state:
+    st.session_state.logueado= False
 
+if st.session_state.logueado:
+    st.success("Bienvenido admin!")
+    if st.button("Cerrar sesión."):
+        st.session_state.logueado= False
+        st.rerun()
+
+else:
+    usuario = st.text_input("Usuario")
+    contrasena = st.text_input("Contraseña", type="password")
+
+    if st.button("Ingresar"):
+        if usuario == "admin" and contrasena == "1234":
+            st.session_state.logueado=True
+            st.rerun()
+        else:
+            st.error("Credenciales incorrectas")
+
+st.divider()
+
+st.subheader("Ejercicio 7:Lista de Compras (Session State)")
+
+if "producto" not in st.session_state:
+    st.session_state.producto=[]
+
+nuevo_producto = st.text_input("Nuevo producto", key="input_producto")
+
+if st.button("Agregar producto") and nuevo_producto:
+    st.session_state.producto.append(nuevo_producto)
+    st.success(f"Producto '*{nuevo_producto}*' agregado!")
+
+st.write("### Tus productos:")
+for i, producto in enumerate(st.session_state.producto):
+    st.write(f"{i + 1}. {producto}")
+
+if st.button("Limpiar lista"):
+    st.session_state.producto = []
+    st.rerun()
+
+st.divider()
+
+st.subheader("Ejercicio 8: Gráfico Interactivo")
+
+N= st.slider("Cantidad de números", min_value=10 , max_value=100 , value= 50)
+
+datos = [random.randint(1, 100) for _ in range(N)]
+
+st.line_chart(datos)
+
+if st.button("Regenerar"):
+    st.rerun()
 
 
 
